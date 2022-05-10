@@ -1,0 +1,28 @@
+<%@ page pageEncoding="UTF-8" %>
+
+
+<footer class="page-footer">
+    <div class="social">
+        <a href="#">
+            <img src="public/img/facebook.png" alt="logo"/>
+        </a>  
+
+        <a href="#">
+            <img src="public/img/instagram.png" alt="logo"/>
+        </a>
+
+        <a href="#">
+            <img src="public/img/twitter.png" alt="logo"/>
+        </a>
+
+        <a href="#">
+            <img src="public/img/youtube.png" alt="logo"/>
+        </a>
+    </div>
+
+    <div class="copyright">
+        <a href="avatar">Adrián Bueno Olmedo</a>
+        <p>Todos los derechos</p>
+    </div>
+
+</footer>
