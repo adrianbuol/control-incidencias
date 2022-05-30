@@ -10,7 +10,7 @@
         <div id="container">
             <h2>Credencial Incorrecta</h2>
             <p>La credencial introducida no está registrada</p>
-            <a href="?cmd=usuario-login">Continuar</a>
+            <a href="?cmd=visita-landing">Continuar</a>
         </div>
     </body>
 </html>

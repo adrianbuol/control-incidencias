@@ -5,9 +5,20 @@
  */
 package org.japo.java.libraries;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import javax.sql.DataSource;
 import org.japo.java.dll.usuario.DLLUsuario;
 import org.japo.java.entities.Usuario;
 
@@ -16,6 +27,16 @@ import org.japo.java.entities.Usuario;
  * @author Adrián Bueno Olmedo <adrian.bueno.alum@iescamp.es>
  */
 public final class UtilesUsuarios {
+
+    // Logger
+    private static final Logger logger = Logger.getLogger(DLLUsuario.class.getName());
+
+    // DataSource
+    DataSource ds;
+
+    public UtilesUsuarios(ServletConfig config) {
+        ds = UtilesServlets.obtenerDataSource(config);
+    }
 
     // Valores por defecto
     public static final int DEF_ID = 0;
@@ -26,6 +47,9 @@ public final class UtilesUsuarios {
     // Expresiones regulares
     public static final String REG_USER = "\\w{3,30}";
     public static final String REG_PASS = "\\w{3,30}";
+
+    // Constantes
+    public static final int AVATAR_MAX_SIZE = 1024 * 256;
 
     private UtilesUsuarios() {
     }
@@ -43,7 +67,7 @@ public final class UtilesUsuarios {
     }
 
     public static final boolean validarAvatar(String avatar) {
-        return UtilesBase64.validar(avatar);
+        return UtilesBase64.validarImagenBase64(avatar);
     }
 
     public static String obtenerComandoVistaPrincipal(HttpServletRequest request) {
@@ -70,6 +94,29 @@ public final class UtilesUsuarios {
 
         // Retorno salida
         return out;
+    }
+
+    public static final int obtenerIdRequest(
+            HttpServletRequest request)
+            throws IOException {
+        // Referencia
+        int id;
+
+        // URL > ID Objeto
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+
+            if (!validarId(id)) {
+                throw new IOException("ID de Usuario Fuera de Rango");
+            }
+        } catch (NullPointerException e) {
+            throw new IOException(e.getMessage());
+        } catch (NumberFormatException e) {
+            throw new IOException("ID de Usuario Incorrecta");
+        }
+
+        // Retorno
+        return id;
     }
 
     public static Usuario obtenerUsuarioRequest(
@@ -124,4 +171,225 @@ public final class UtilesUsuarios {
         return sesion;
     }
 
+    public static final String obtenerUserRequest(
+            HttpServletRequest request)
+            throws IOException {
+        // Request > User
+        String user = request.getParameter("user");
+
+        // Validar User
+        if (!validarUser(user)) {
+            throw new IOException("Nombre de Usuario Incorrecto");
+        }
+
+        // Retorno: Nombre de Usuario
+        return user;
+    }
+
+    public static final String obtenerPassRequest(
+            HttpServletRequest request)
+            throws IOException {
+        // Request > Pass
+        String pass = request.getParameter("pass");
+
+        // Validar Contraseña
+        if (!validarPass(pass)) {
+            throw new IOException("Contraseña Incorrecta");
+        }
+
+        // Retorno: Contraseña
+        return pass;
+    }
+
+    public static final String obtenerAvatarRequest(
+            ServletConfig config,
+            HttpServletRequest request)
+            throws IOException, ServletException {
+        // Imagen Base64
+        String avatar;
+
+        // Request > Part
+        Part part = request.getPart("avatar");
+
+        // Imagen Enviada
+        if (part.getSize() > 0) {
+            // Validar Tamaño Avatar
+            if (AVATAR_MAX_SIZE <= 0) {
+                // No hay tamaño máximo
+                avatar = UtilesBase64.obtenerImagenBase64(part);
+            } else if (part.getSize() <= AVATAR_MAX_SIZE) {
+                // Tamaño Correcto
+                avatar = UtilesBase64.obtenerImagenBase64(part);
+            } else {
+                // Tamaño Excesivo - Avatar Predeterminado
+                avatar = DEF_AVATAR;
+            }
+        } else {
+            // Avatar NO modificado - Request + ID Usuario + BD > Usuario
+            Usuario usuario = consultarUsuarioIdRequest(config, request);
+
+            // Usuario > Avatar
+            avatar = usuario.getAvatar();
+        }
+
+        // Retorno: Avatar
+        return avatar;
+    }
+
+    public static final int obtenerPerfilRequest(
+            HttpServletRequest request)
+            throws IOException {
+        // Request > ID Perfil
+        int perfil;
+        try {
+            if (request.getParameter("perfil") == null) {
+                perfil = UtilesPerfiles.BASIC_CODE;
+            } else {
+                perfil = Integer.parseInt(request.getParameter("perfil"));
+            }
+
+            // Validar ID Perfil
+            if (!UtilesPerfiles.validarId(perfil)) {
+                throw new IOException("Perfil Incorrecto");
+            }
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IOException("Perfil Incorrecto");
+        }
+
+        // Retorno: ID Perfil
+        return perfil;
+    }
+
+    public static final List<Usuario> listarUsuariosPerfil(
+            ServletConfig config,
+            HttpServletRequest request) {
+        // Referencia
+        List<Usuario> usuarios;
+
+        // Request > Sesión
+        HttpSession sesion = request.getSession(false);
+
+        // Sesión > Usuario               
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+
+        // Capas de Datos
+        DLLUsuario dllUsuario = new DLLUsuario(config);
+
+        // Determinar Perfil Usuario
+        switch (usuario.getPerfil()) {
+            case UtilesPerfiles.DEVEL_CODE:
+                // BD > Lista de Usuarios
+                usuarios = dllUsuario.listarDev();
+                break;
+            case UtilesPerfiles.ADMIN_CODE:
+                // BD > Lista de Usuarios
+                usuarios = dllUsuario.listarDev();
+                break;
+            case UtilesPerfiles.BASIC_CODE:
+            default:
+                // Usuario Actual (Únicamente) > Lista de Usuarios
+                usuarios = new ArrayList<>();
+                usuarios.add(usuario);
+        }
+
+        // Retorno: Lista de usuarios visibles por el perfil
+        return usuarios;
+    }
+
+    public static final Usuario consultarUsuarioIdRequest(
+            ServletConfig config,
+            HttpServletRequest request)
+            throws IOException {
+        // Capas de Negocio
+        DLLUsuario dllUsuario = new DLLUsuario(config);
+
+        // Request > Id de Usuario
+        int id = obtenerIdRequest(request);
+
+        // Retorno: Usuario
+        return dllUsuario.consultar(id);
+    }
+
+    public static final Usuario obtenerUsuarioUserRequest(
+            ServletConfig config,
+            HttpServletRequest request) {
+        // Capas de Negocio
+        DLLUsuario dllUsuario = new DLLUsuario(config);
+
+        // Request > Nombre de Usuario
+        String user = request.getParameter("user");
+
+        // Nombre de Usuario + BD > Usuario
+        Usuario usuario = dllUsuario.consultar(user);
+
+        // Request > Contraseña de Usuario
+        String pass = request.getParameter("pass");
+
+        // Validar Contraseña
+        usuario = usuario != null && usuario.getPass().equals(pass)
+                ? usuario : null;
+
+        // Retorno: Usuario
+        return usuario;
+    }
+
+    public static final boolean validarFormatoCredencialRequest(
+            HttpServletRequest request) {
+        // Request > Credenciales
+        String user = request.getParameter("user");
+        String pass = request.getParameter("pass");
+
+        // Validación Formal de la Credencial 
+        return true
+                && user != null && validarUser(user)
+                && pass != null && validarPass(pass);
+    }
+
+    public List<Usuario> listarDev() {
+        // SQL
+        String sql = ""
+                + "SELECT "
+                + "usuarios.id AS id, "
+                + "usuarios.user AS user, "
+                + "usuarios.pass AS pass, "
+                + "usuarios.avatar AS avatar, "
+                + "usuarios.perfil AS perfil, "
+                + "perfiles.info AS perfil_info "
+                + "FROM "
+                + "usuarios "
+                + "INNER JOIN "
+                + "perfiles ON perfiles.id = usuarios.perfil ";
+
+        // Lista Vacía
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try {
+            try (
+                    Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+                // BD > Lista de Entidades
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        // Fila Actual > Campos 
+                        int id = rs.getInt("id");
+                        String user = rs.getString("user");
+                        String pass = rs.getString("pass");
+                        String avatar = rs.getString("avatar");
+                        int perfil = rs.getInt("perfil");
+                        String perfilInfo = rs.getString("perfil_info");
+
+                        // Campos > Entidad
+                        Usuario usuario = new Usuario(id, user, pass, avatar, perfil, perfilInfo);
+
+                        // Entidad > Lista
+                        usuarios.add(usuario);
+                    }
+                }
+            }
+        } catch (SQLException | NullPointerException ex) {
+            logger.info(ex.getMessage());
+        }
+
+        // Retorno Lista
+        return usuarios;
+    }
 }

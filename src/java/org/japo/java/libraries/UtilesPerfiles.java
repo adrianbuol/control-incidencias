@@ -11,26 +11,32 @@ package org.japo.java.libraries;
  */
 public final class UtilesPerfiles {
 
-    // Códigos de Perfiles
+    // Códigos de Perfiles Básicos
+    public static final int VISIT_CODE = 0;
     public static final int BASIC_CODE = 100;
     public static final int ADMIN_CODE = 800;
+    public static final int DEVEL_CODE = 900;
 
-    // Nombres de Perfiles
+    // Nombres de Perfiles Básicos
+    public static final String VISIT_NAME = "Visitante";
     public static final String BASIC_NAME = "Usuario";
     public static final String ADMIN_NAME = "Administrador";
+    public static final String DEVEL_NAME = "Desarrollador";
 
-    // Información de Perfiles
-    public static final String BASIC_INFO = "Usuario Registrado";
+    // Descripción de Perfiles Básicos
+    public static final String VISIT_INFO = "Usuario NO Identificado";
+    public static final String BASIC_INFO = "Usuario Identificado";
     public static final String ADMIN_INFO = "Usuario con Derechos Administrativos";
+    public static final String DEVEL_INFO = "Usuario con Derechos de Desarrollo";
 
-    // Valores por defecto
+    // Valores por Defecto
     public static final int DEF_ID = 0;
-    public static final String DEF_NOMBRE = "Indefinido";
-    public static final String DEF_INFO = "Perfil Indefinido";
+    public static final String DEF_NOMBRE = VISIT_NAME;
+    public static final String DEF_INFO = VISIT_INFO;
 
     // Expresiones regulares
-    public static final String REG_NOMBRE = "[\\w]{3,30}";
-    public static final String REG_INFO = "[\\w áéíóúÁÉÍÓÚçÇñÑ]{3,100}";
+    public static final String REG_NOMBRE = "[\\wáéíóúüñÁÉÍÓÚÜÑ]{6,20}";
+    public static final String REG_INFO = "[\\wáéíóúüñÁÉÍÓÚÜÑ\\- ]{6,50}";
 
     private UtilesPerfiles() {
     }

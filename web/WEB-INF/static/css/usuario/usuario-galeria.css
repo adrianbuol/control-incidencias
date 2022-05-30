@@ -1,0 +1,46 @@
+body{
+    overflow-y: auto !important;
+}
+.galeria {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
+.ficha{
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 10px;
+    justify-content: center;
+}
+.ficha > a{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 25vw;
+    text-decoration: none;
+    color: white;
+    background-color: #000000;
+    box-shadow: 1px 1px 1px 1px white;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin: 5px 5px;
+}
+.ficha > a:hover {
+    box-shadow: 1px 1px 1px 5px purple;
+}
+.ficha > a > img {
+    height: 200px;
+    width: 160px;
+}
+.ficha > a > div {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px;
+}
+.ficha > a > div > * {
+    margin: 0 5px;
+}

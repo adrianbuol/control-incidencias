@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Web App</title>
         <link rel="stylesheet" href="public/css/visita/visita-landing.css"/>
+        <link rel="stylesheet" href="public/css/general/general.css"/>
         <link rel="stylesheet" href="public/css/partials/header.css"/>
         <link rel="stylesheet" href="public/css/partials/footer.css"/>
     </head>

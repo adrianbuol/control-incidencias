@@ -34,41 +34,65 @@ body {
 
 #container form {
     padding: 0 1rem;
-     
+
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /*align-items: center;*/
     gap: 1rem;
 }
 
 #container form .fieldset {
     display: flex;
     align-items: center;
-    background-color: #eee;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.13);
     gap: 1rem;
 }
 
 #container form  label {
     width: 10rem;
     align-items: center;
-    
+
 }
 
 #container form .fieldset input {
     padding: .2rem .5rem;
     font-size: 1rem;
     flex: auto;
+
 }
 
 #container form .buttonset input {
     width: 12rem;
     height: 2rem;
-    
+
     background-color: #eee;
     border: solid .1rem #333;
     border-radius: .2rem;
+
+}
+.buttonset>input:hover{
+    box-shadow: 0 0 0 5px purple;
+    cursor:pointer;
 }
 
-
-
+h2 {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+}
+#boton {
+    width: 10vw;
+    height: 7vh;
+    border: 1px #eee solid;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#atras{
+    color: purple;
+    text-decoration: none;
+    padding: 30px;
+}

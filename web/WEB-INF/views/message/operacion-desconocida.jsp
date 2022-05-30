@@ -10,7 +10,7 @@
         <div id="container">
             <h2>Operación Desconocida</h2>
             <p>No se ha encontrado la operación solicitada</p>
-            <a href="?cmd=usuario-login">Continuar</a>
+            <a href="?cmd=visita-landing">Continuar</a>
         </div>
     </body>
 </html>

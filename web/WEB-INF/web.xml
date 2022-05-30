@@ -21,7 +21,7 @@
         <param-value>control_incidencias</param-value>
     </context-param>
     <context-param>
-        <param-name>apso-inactividad</param-name>
+        <param-name>lapso-inactividad</param-name>
         <param-value>1800</param-value>
     </context-param>
 </web-app>

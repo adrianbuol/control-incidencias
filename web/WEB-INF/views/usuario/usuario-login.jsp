@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Web App</title>
         <link rel="stylesheet" href="public/css/usuario/usuario-login.css"/>
+        <link rel="stylesheet" href="public/css/general/general.css"/>
     </head>
     <body>
         <div id="container">
@@ -25,11 +26,19 @@
                 <div class="buttonset">
                     <input type="submit" value="Enviar">
                     <input type="reset" value="Reiniciar">
-
                 </div>
             </form>
+            <div id="boton"><a id="atras" href="?cmd=visita-landing">Atrás</a> </div>
 
-
+            <div class='light x1'></div>
+            <div class='light x2'></div>
+            <div class='light x3'></div>
+            <div class='light x4'></div>
+            <div class='light x5'></div>
+            <div class='light x6'></div>
+            <div class='light x7'></div>
+            <div class='light x8'></div>
+            <div class='light x9'></div>
         </div>
 
     </body>

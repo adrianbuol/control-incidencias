@@ -67,6 +67,7 @@ public final class Usuario implements Serializable {
         }
     }
 
+
     public int getId() {
         return id;
     }

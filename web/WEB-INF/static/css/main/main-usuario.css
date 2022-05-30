@@ -14,23 +14,31 @@ html {
 
 body {
     font-family: sans-serif;
+    overflow-y: auto !important;
 }
 
 /* --- */
 
 #container {
     height: 100vh;
-
-    background-color: darkgray;
-    background-image: linear-gradient(rgb(139, 226, 248), rgb(218, 255, 203));
-
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
-
+#container>*{
+    padding: 20px;
+}
+#container>img {
+    width: 25%;
+    box-shadow: 0 0 30px white;
+    padding: 0;
+}
 /* --- */
 
 main {
-    height: 80vh;
-
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -47,3 +55,95 @@ h1 {
     text-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.7);
 }
 
+main > div {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+#lista{
+    width: 80%;
+}
+td, th{
+    padding: 5px;
+    border: 1px solid black;
+    background-color: rgba(204, 180, 180, 0.1);
+    color: #ccc;
+}
+.funciones{
+    display: flex;
+    justify-content: center;
+}
+.funciones > a {
+    text-decoration: none;
+    color: #8c03fc;
+    margin: 0 5px;
+}
+.funciones > a:hover {
+    color: #ccc;
+}
+.controles > button, .controles > a{
+    cursor: pointer;
+    margin-left: 10px;
+}
+.controles > a{
+    font-size: 16px;
+    color: black;
+}
+
+form {
+    width: 60%;
+}
+/*form>div>div>div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}*/
+main > form {
+    background-color: rgba(152, 85, 158, 0.459);
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 2px 2px 2px #ccc;
+}
+img, .avatar-frame {
+    width: 150px
+}
+.field-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.field-set {
+    display: flex;
+    width: 100%;
+}
+.field-set:nth-child(4) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.field-set:nth-child(4) > label {
+    text-align: center;
+}
+.field-set > label {
+    width: 30%;
+    background-color: white;
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    box-shadow: 1px 1px 1px #ccc;
+}
+.field-set > input {
+    width: 70%;
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-right: 5px;
+}

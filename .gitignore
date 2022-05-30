@@ -1,2 +1,4 @@
 /build/
 /nbproject/private/
+/dist/
+/src/java/org/japo/java/bll/commands/usuario/CommandUsuarioCrud.java

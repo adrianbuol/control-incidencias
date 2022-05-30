@@ -16,7 +16,7 @@
         <div id="container">
             <h2>Recurso NO Disponible</h2>
             <p>El recurso de la petición no está disponible.</p>
-            <a href="?cmd=usuario-login">Continuar</a>
+            <a href="?cmd=visita-landing">Continuar</a>
         </div>
     </body>
 </html>
